@@ -440,6 +440,7 @@ class _AuthField extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.35), fontSize: 14),
           prefixIcon: Icon(icon, color: AppColors.primaryLight, size: 20),
           suffixIcon: suffixIcon,
+          filled: false,
           border: InputBorder.none,
           contentPadding: const EdgeInsets.symmetric(
               horizontal: AppDimensions.md, vertical: 14),
