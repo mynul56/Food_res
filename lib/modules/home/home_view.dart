@@ -11,6 +11,7 @@ import 'widgets/food_card.dart';
 import 'widgets/category_chip.dart';
 import 'widgets/banner_carousel.dart';
 import 'widgets/recommendation_section.dart';
+import 'widgets/featured_carousel.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -45,6 +46,14 @@ class HomeView extends GetView<HomeController> {
                 padding: const EdgeInsets.symmetric(vertical: AppDimensions.md),
                 child: BannerCarousel(),
               ).animate().fadeIn(delay: 150.ms),
+            ),
+
+            // ── Featured Restaurant Carousel ───────────────────
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.only(top: AppDimensions.sm),
+                child: const FeaturedCarousel(),
+              ).animate().fadeIn(delay: 200.ms).slideY(begin: 0.15),
             ),
 
             // ── Categories ────────────────────────────────────
@@ -88,15 +97,32 @@ class HomeView extends GetView<HomeController> {
                     const EdgeInsets.symmetric(horizontal: AppDimensions.md),
                 sliver: SliverGrid(
                   delegate: SliverChildBuilderDelegate(
-                    (ctx, i) => FoodCard(
-                      food: foods[i],
-                      onTap: () => Get.toNamed(
-                        AppRoutes.foodDetails,
-                        arguments: foods[i],
-                      ),
-                    ).animate().fadeIn(
-                          delay: Duration(milliseconds: 80 * i),
+                    (ctx, i) {
+                      final delay = Duration(milliseconds: 60 * i);
+                      return FoodCard(
+                        food: foods[i],
+                        onTap: () => Get.toNamed(
+                          AppRoutes.foodDetails,
+                          arguments: foods[i],
                         ),
+                      )
+                          .animate()
+                          .fadeIn(delay: delay, duration: 350.ms)
+                          .slideY(
+                            begin: 0.25,
+                            end: 0,
+                            delay: delay,
+                            duration: 380.ms,
+                            curve: Curves.easeOutCubic,
+                          )
+                          .scale(
+                            begin: const Offset(0.88, 0.88),
+                            end: const Offset(1, 1),
+                            delay: delay,
+                            duration: 380.ms,
+                            curve: Curves.easeOutBack,
+                          );
+                    },
                     childCount: foods.length,
                   ),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -118,8 +144,7 @@ class HomeView extends GetView<HomeController> {
                     )),
             ),
 
-            const SliverPadding(
-                padding: EdgeInsets.only(bottom: AppDimensions.xxl + 20)),
+            const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
           ],
         ),
       ),
