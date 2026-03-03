@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "516099791306",
+    "project_id": "nuleat",
+    "storage_bucket": "nuleat.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:516099791306:android:8ae5ed0d0da5c323501733",
+        "android_client_info": {
+          "package_name": "com.mynul.restaurant_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAjjUcev8x3TcNXj5EB9I9jZwcKi5vWDo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

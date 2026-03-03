@@ -277,26 +277,31 @@ class AuthView extends GetView<AuthController> {
 
                   const SizedBox(height: AppDimensions.lg),
 
-                  // ── Social buttons ────────────────────────
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _SocialButton(
-                          label: 'Google',
-                          emoji: '🇬',
-                          onTap: controller.continueAsGuest,
-                        ),
-                      ),
-                      const SizedBox(width: AppDimensions.md),
-                      Expanded(
-                        child: _SocialButton(
-                          label: 'Apple',
-                          emoji: '🍎',
-                          onTap: controller.continueAsGuest,
-                        ),
-                      ),
-                    ],
-                  ).animate().fadeIn(delay: 500.ms),
+                  Obx(() => Row(
+                        children: [
+                          Expanded(
+                            child: controller.isGoogleLoading.value
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : _SocialButton(
+                                    label: 'Google',
+                                    emoji: '🇬',
+                                    onTap: controller.signInWithGoogle,
+                                  ),
+                          ),
+                          const SizedBox(width: AppDimensions.md),
+                          Expanded(
+                            child: controller.isFacebookLoading.value
+                                ? const Center(
+                                    child: CircularProgressIndicator())
+                                : _SocialButton(
+                                    label: 'Facebook',
+                                    emoji: '🇫',
+                                    onTap: controller.signInWithFacebook,
+                                  ),
+                          ),
+                        ],
+                      )).animate().fadeIn(delay: 500.ms),
 
                   const SizedBox(height: AppDimensions.xl),
 
