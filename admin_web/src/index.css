@@ -296,3 +296,256 @@ td {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+/* ========== User Management ========== */
+
+/* Stat Grid */
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.06);
+}
+
+.stat-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stat-label {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* User Avatars */
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.user-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #E25F38 0%, #f59e0b 100%);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.profile-avatar-lg {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #E25F38 0%, #f59e0b 100%);
+  color: white;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* Role Badges */
+.badge-role-admin {
+  background: #ede9fe;
+  color: #7c3aed;
+}
+
+.badge-role-customer {
+  background: #ccfbf1;
+  color: #0d9488;
+}
+
+/* Search */
+.search-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px 10px 42px;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  background: #f9fafb;
+  transition: all 0.2s;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: var(--white);
+  box-shadow: 0 0 0 3px rgba(226, 95, 56, 0.08);
+}
+
+/* Filter Tabs */
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  background: #f3f4f6;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+.filter-tab {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filter-tab:hover {
+  color: var(--text-primary);
+}
+
+.filter-tab.active {
+  background: var(--white);
+  color: var(--primary-color);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1);
+}
+
+.filter-count {
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 7px;
+  border-radius: 9999px;
+  font-weight: 600;
+}
+
+.filter-tab.active .filter-count {
+  background: rgba(226, 95, 56, 0.12);
+  color: var(--primary-color);
+}
+
+/* Action Buttons */
+.action-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.action-btn-view {
+  color: #0284c7;
+  background: #e0f2fe;
+}
+
+.action-btn-view:hover {
+  background: #bae6fd;
+}
+
+.action-btn-promote {
+  color: #059669;
+  background: #d1fae5;
+}
+
+.action-btn-promote:hover {
+  background: #a7f3d0;
+}
+
+.action-btn-demote {
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.action-btn-demote:hover {
+  background: #fde68a;
+}
+
+.action-btn-delete {
+  color: #ef4444;
+  background: #fee2e2;
+}
+
+.action-btn-delete:hover {
+  background: #fecaca;
+}
+
+/* Profile Card */
+.user-profile-card {
+  position: sticky;
+  top: 32px;
+}
+
+.profile-info-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Button Variants */
+.btn-outline-success {
+  border: 1.5px solid #059669;
+  color: #059669;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline-success:hover {
+  background: #d1fae5;
+}
+
+.btn-outline-danger {
+  border: 1.5px solid #ef4444;
+  color: #ef4444;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-outline-danger:hover {
+  background: #fee2e2;
+}

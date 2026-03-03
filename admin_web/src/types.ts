@@ -29,3 +29,12 @@ export interface OrderEntity {
     status: OrderStatus;
     address?: string;
 }
+
+export interface UserEntity {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    profileImageUrl: string | null;
+    createdAt: any;
+}

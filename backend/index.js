@@ -144,6 +144,67 @@ exports.updateOrderStatus = functions.https.onCall(async (data, context) => {
     return { success: true };
 });
 
+// --- USERS API ---
+
+// Admin: Get all users
+exports.getUsers = functions.https.onCall(async (data, context) => {
+    await checkAdmin(context);
+    const snapshot = await admin.firestore()
+        .collection("users")
+        .orderBy("createdAt", "desc")
+        .get();
+
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+});
+
+// Admin: Get single user details + their orders
+exports.getUserDetails = functions.https.onCall(async (data, context) => {
+    await checkAdmin(context);
+    const { uid } = data;
+    if (!uid) throw new functions.https.HttpsError("invalid-argument", "Missing uid.");
+
+    const userDoc = await admin.firestore().collection("users").doc(uid).get();
+    if (!userDoc.exists) {
+        throw new functions.https.HttpsError("not-found", "User not found.");
+    }
+
+    const ordersSnapshot = await admin.firestore()
+        .collection("orders")
+        .where("userId", "==", uid)
+        .orderBy("placedAt", "desc")
+        .get();
+
+    const orders = ordersSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    return {
+        user: { id: userDoc.id, ...userDoc.data() },
+        orders
+    };
+});
+
+// Admin: Update user role
+exports.updateUserRole = functions.https.onCall(async (data, context) => {
+    await checkAdmin(context);
+    const { uid, role } = data;
+    if (!uid || !role) throw new functions.https.HttpsError("invalid-argument", "Missing uid or role.");
+    if (!["customer", "admin"].includes(role)) {
+        throw new functions.https.HttpsError("invalid-argument", "Role must be 'customer' or 'admin'.");
+    }
+
+    await admin.firestore().collection("users").doc(uid).update({ role });
+    return { success: true };
+});
+
+// Admin: Delete user
+exports.deleteUser = functions.https.onCall(async (data, context) => {
+    await checkAdmin(context);
+    const { uid } = data;
+    if (!uid) throw new functions.https.HttpsError("invalid-argument", "Missing uid.");
+
+    await admin.firestore().collection("users").doc(uid).delete();
+    return { success: true };
+});
+
 // --- STORAGE API ---
 
 // Authenticated: Upload image

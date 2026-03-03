@@ -1,6 +1,6 @@
 import React from "react";
 import { Outlet, NavLink } from "react-router-dom";
-import { LayoutDashboard, Menu as MenuIcon, ClipboardList, LogOut } from "lucide-react";
+import { LayoutDashboard, Menu as MenuIcon, ClipboardList, Users, LogOut } from "lucide-react";
 import { auth } from "../firebase.ts";
 
 const Layout: React.FC = () => {
@@ -37,6 +37,13 @@ const Layout: React.FC = () => {
                     >
                         <ClipboardList size={20} />
                         Live Orders
+                    </NavLink>
+                    <NavLink
+                        to="/users"
+                        className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}
+                    >
+                        <Users size={20} />
+                        Users
                     </NavLink>
                 </nav>
             </aside>

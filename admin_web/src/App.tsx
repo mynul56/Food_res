@@ -7,6 +7,8 @@ import Dashboard from "./pages/Dashboard.tsx";
 import ManageMenu from "./pages/ManageMenu.tsx";
 import AddEditFood from "./pages/AddEditFood.tsx";
 import ManageOrders from "./pages/ManageOrders.tsx";
+import ManageUsers from "./pages/ManageUsers.tsx";
+import UserDetail from "./pages/UserDetail.tsx";
 import Login from "./pages/Login.tsx";
 
 function App() {
@@ -42,6 +44,8 @@ function App() {
             <Route path="add-food" element={<AddEditFood />} />
             <Route path="edit-food/:id" element={<AddEditFood />} />
             <Route path="orders" element={<ManageOrders />} />
+            <Route path="users" element={<ManageUsers />} />
+            <Route path="users/:id" element={<UserDetail />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         ) : (

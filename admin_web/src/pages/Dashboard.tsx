@@ -2,32 +2,37 @@ import { useEffect, useState } from "react";
 import { functions } from "../firebase.ts";
 import { httpsCallable } from "firebase/functions";
 import type { OrderEntity } from "../types.ts";
-import { DollarSign, ShoppingBag } from "lucide-react";
+import { DollarSign, ShoppingBag, Users } from "lucide-react";
 
 export default function Dashboard() {
     const [recentOrders, setRecentOrders] = useState<OrderEntity[]>([]);
     const [totalRevenue, setTotalRevenue] = useState(0);
     const [totalOrders, setTotalOrders] = useState(0);
+    const [totalUsers, setTotalUsers] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchOrders = async () => {
+        const fetchData = async () => {
             try {
-                const getAdminOrders = httpsCallable(functions, 'getAdminOrders');
-                const result = await getAdminOrders();
-                const ordersData = result.data as OrderEntity[];
+                const [ordersResult, usersResult] = await Promise.all([
+                    httpsCallable(functions, 'getAdminOrders')(),
+                    httpsCallable(functions, 'getUsers')()
+                ]);
+                const ordersData = ordersResult.data as OrderEntity[];
+                const usersData = usersResult.data as any[];
 
                 setRecentOrders(ordersData.slice(0, 5));
                 setTotalOrders(ordersData.length);
                 setTotalRevenue(ordersData.reduce((acc: number, curr: OrderEntity) => acc + curr.total, 0));
+                setTotalUsers(usersData.length);
             } catch (error) {
-                console.error("Error fetching orders:", error);
+                console.error("Error fetching dashboard data:", error);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchOrders();
+        fetchData();
     }, []);
 
     if (loading) return <div>Loading dashboard...</div>;
@@ -54,6 +59,16 @@ export default function Dashboard() {
                     <div>
                         <div style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Total Orders</div>
                         <div style={{ fontSize: '2rem', fontWeight: 700 }}>{totalOrders}</div>
+                    </div>
+                </div>
+
+                <div className="card" style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                    <div style={{ padding: '16px', backgroundColor: '#ede9fe', color: '#7c3aed', borderRadius: '50%' }}>
+                        <Users size={32} />
+                    </div>
+                    <div>
+                        <div style={{ color: 'var(--text-secondary)', fontWeight: 500 }}>Total Users</div>
+                        <div style={{ fontSize: '2rem', fontWeight: 700 }}>{totalUsers}</div>
                     </div>
                 </div>
             </div>
