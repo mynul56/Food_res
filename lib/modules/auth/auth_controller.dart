@@ -3,6 +3,8 @@ import '../../app/routes/app_routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import '../../data/datasources/firebase_user_datasource.dart';
+import '../../domain/entities/user_entity.dart';
 
 class AuthController extends GetxController {
   final email = ''.obs;
@@ -18,6 +20,32 @@ class AuthController extends GetxController {
   void toggleMode() => isLogin.toggle();
   void togglePasswordVisibility() => obscurePassword.toggle();
   void toggleConfirmVisibility() => obscureConfirm.toggle();
+
+  final FirebaseUserDatasource _userDatasource = FirebaseUserDatasource();
+
+  Future<void> _handleAuthSuccess(User firebaseUser, {String? name}) async {
+    UserEntity? user = await _userDatasource.getUser(firebaseUser.uid);
+
+    if (user == null) {
+      // Create new user record
+      user = UserEntity(
+        id: firebaseUser.uid,
+        name: name ?? firebaseUser.displayName ?? 'Customer',
+        email: firebaseUser.email ?? '',
+        profileImageUrl: firebaseUser.photoURL,
+        role: 'customer', // default role
+        createdAt: DateTime.now(),
+      );
+      await _userDatasource.createUserOrUpdate(user);
+    }
+
+    if (user.isAdmin) {
+      // Will route to admin dashboard later, for now just use shell or a placeholder
+      Get.offAllNamed('/admin-dashboard');
+    } else {
+      Get.offAllNamed(AppRoutes.shell);
+    }
+  }
 
   Future<void> submit() async {
     if (isLoading.value) return;
@@ -45,11 +73,13 @@ class AuthController extends GetxController {
       if (isLogin.value) {
         await FirebaseAuth.instance.signInWithEmailAndPassword(
             email: email.value.trim(), password: password.value);
+        await _handleAuthSuccess(FirebaseAuth.instance.currentUser!);
       } else {
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
             email: email.value.trim(), password: password.value);
+        await _handleAuthSuccess(FirebaseAuth.instance.currentUser!,
+            name: email.value.trim().split('@').first);
       }
-      Get.offAllNamed(AppRoutes.shell);
     } on FirebaseAuthException catch (e) {
       Get.snackbar('Error', e.message ?? 'Authentication failed',
           snackPosition: SnackPosition.BOTTOM);
@@ -79,7 +109,8 @@ class AuthController extends GetxController {
       );
 
       await FirebaseAuth.instance.signInWithCredential(credential);
-      Get.offAllNamed(AppRoutes.shell);
+      await _handleAuthSuccess(FirebaseAuth.instance.currentUser!,
+          name: googleUser.displayName);
     } on FirebaseAuthException catch (e) {
       Get.snackbar('Google Login Failed', e.message ?? 'Unknown error occurred',
           snackPosition: SnackPosition.BOTTOM);
@@ -103,7 +134,7 @@ class AuthController extends GetxController {
             FacebookAuthProvider.credential(accessToken.tokenString);
 
         await FirebaseAuth.instance.signInWithCredential(credential);
-        Get.offAllNamed(AppRoutes.shell);
+        await _handleAuthSuccess(FirebaseAuth.instance.currentUser!);
       } else if (result.status == LoginStatus.cancelled) {
         // User canceled login
       } else {

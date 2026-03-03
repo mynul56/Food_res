@@ -24,6 +24,11 @@ import '../../modules/profile/profile_view.dart';
 import '../../modules/profile/profile_binding.dart';
 import '../../modules/address/address_view.dart';
 import '../../modules/address/address_controller.dart';
+import '../../modules/admin/admin_dashboard_view.dart';
+import '../../modules/admin/admin_binding.dart';
+import '../../modules/admin/manage_menu_view.dart';
+import '../../modules/admin/add_edit_food_view.dart';
+import '../../modules/admin/manage_orders_view.dart';
 
 class AppPages {
   static final routes = [
@@ -106,6 +111,28 @@ class AppPages {
       page: () => const AddressView(),
       binding: BindingsBuilder(
           () => Get.lazyPut<AddressController>(() => AddressController())),
+      transition: Transition.rightToLeft,
+    ),
+    // ── Admin Routes ──────────────────────────────
+    GetPage(
+      name: AppRoutes.adminDashboard,
+      page: () => const AdminDashboardView(),
+      binding: AdminBinding(),
+      transition: Transition.fadeIn,
+    ),
+    GetPage(
+      name: AppRoutes.adminMenu,
+      page: () => const ManageMenuView(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.adminAddFood,
+      page: () => const AddEditFoodView(),
+      transition: Transition.rightToLeft,
+    ),
+    GetPage(
+      name: AppRoutes.adminOrders,
+      page: () => const ManageOrdersView(),
       transition: Transition.rightToLeft,
     ),
   ];

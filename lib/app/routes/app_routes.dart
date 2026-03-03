@@ -12,4 +12,10 @@ class AppRoutes {
   static const checkout = '/checkout';
   static const profile = '/profile';
   static const addresses = '/addresses';
+
+  // Admin Routes
+  static const adminDashboard = '/admin-dashboard';
+  static const adminMenu = '/admin-menu';
+  static const adminOrders = '/admin-orders';
+  static const adminAddFood = '/admin-add-food';
 }

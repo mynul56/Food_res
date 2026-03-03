@@ -1,19 +1,18 @@
 import '../../domain/entities/food_entity.dart';
 import '../../domain/entities/category_entity.dart';
 import '../../domain/repositories/food_repository.dart';
-import '../datasources/mock_food_datasource.dart';
+import '../datasources/firebase_food_datasource.dart';
 
 class FoodRepositoryImpl implements FoodRepository {
+  final FirebaseFoodDatasource _dataSource = FirebaseFoodDatasource();
+
   @override
   Future<List<FoodEntity>> getFoods() async {
-    // Simulate network latency
-    await Future.delayed(const Duration(milliseconds: 800));
-    return MockFoodDatasource.getFoods();
+    return _dataSource.getFoods();
   }
 
   @override
   Future<List<CategoryEntity>> getCategories() async {
-    await Future.delayed(const Duration(milliseconds: 200));
-    return MockFoodDatasource.getCategories();
+    return _dataSource.getCategories();
   }
 }

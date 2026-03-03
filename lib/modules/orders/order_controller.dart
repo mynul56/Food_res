@@ -3,11 +3,33 @@ import '../../app/routes/app_routes.dart';
 import '../../domain/entities/order_entity.dart';
 import '../../domain/entities/cart_item_entity.dart';
 import '../cart/cart_controller.dart';
+import '../../data/datasources/firebase_order_datasource.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class OrderController extends GetxController {
   final activeOrder = Rx<OrderEntity?>(null);
   final orderHistory = <OrderEntity>[].obs;
   final trackingStep = 0.obs; // 0–3 maps to OrderStatus
+
+  final FirebaseOrderDatasource _orderDatasource = FirebaseOrderDatasource();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _fetchOrderHistory();
+  }
+
+  Future<void> _fetchOrderHistory() async {
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      try {
+        final orders = await _orderDatasource.getUserOrders(userId);
+        orderHistory.assignAll(orders);
+      } catch (e) {
+        print('Error fetching orders: $e');
+      }
+    }
+  }
 
   // Returns true if there is an undelivered active order
   bool get hasActiveOrder =>
@@ -42,6 +64,15 @@ class OrderController extends GetxController {
     trackingStep.value = 0;
     cart.clearCart();
 
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      try {
+        await _orderDatasource.placeOrder(order, userId);
+      } catch (e) {
+        Get.snackbar('Error', 'Failed to save order to cloud: $e');
+      }
+    }
+
     Get.offAllNamed(AppRoutes.orderTracking);
 
     // Auto-advance tracking steps
@@ -60,10 +91,19 @@ class OrderController extends GetxController {
     }
   }
 
-  void _advanceStatus(OrderStatus status) {
+  void _advanceStatus(OrderStatus status) async {
     if (activeOrder.value == null) return;
-    activeOrder.value = activeOrder.value!.copyWith(status: status);
+
+    final order = activeOrder.value!;
+    activeOrder.value = order.copyWith(status: status);
     trackingStep.value = status.index;
+
+    // Attempt to update the status in Firebase
+    try {
+      await _orderDatasource.updateOrderStatus(order.id, status);
+    } catch (e) {
+      print('Warning: Failed to sync status with Firebase: $e');
+    }
   }
 
   void reorder(OrderEntity order, CartController cart) {

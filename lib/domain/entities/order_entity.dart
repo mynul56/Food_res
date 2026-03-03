@@ -77,4 +77,43 @@ class OrderEntity {
       paymentMethod: paymentMethod,
     );
   }
+
+  factory OrderEntity.fromJson(Map<String, dynamic> json, String id) {
+    final statusString = json['status'] as String? ?? 'accepted';
+    final parsedStatus = OrderStatus.values.firstWhere(
+      (e) => e.name == statusString,
+      orElse: () => OrderStatus.accepted,
+    );
+
+    return OrderEntity(
+      id: id,
+      items: (json['items'] as List<dynamic>? ?? [])
+          .map((e) => CartItemEntity.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      subtotal: (json['subtotal'] ?? 0.0).toDouble(),
+      deliveryFee: (json['deliveryFee'] ?? 0.0).toDouble(),
+      discount: (json['discount'] ?? 0.0).toDouble(),
+      restaurantName: json['restaurantName'] ?? '',
+      status: parsedStatus,
+      placedAt: json['placedAt'] != null
+          ? DateTime.parse(json['placedAt'] as String)
+          : DateTime.now(),
+      address: json['address'],
+      paymentMethod: json['paymentMethod'] ?? 'Cash on Delivery',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'items': items.map((e) => e.toJson()).toList(),
+      'subtotal': subtotal,
+      'deliveryFee': deliveryFee,
+      'discount': discount,
+      'restaurantName': restaurantName,
+      'status': status.name,
+      'placedAt': placedAt.toIso8601String(),
+      'address': address,
+      'paymentMethod': paymentMethod,
+    };
+  }
 }
