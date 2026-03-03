@@ -140,15 +140,19 @@ class HomeView extends GetView<HomeController> {
           StretchMode.blurBackground,
         ],
         title: Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             const Text('🍽️  ', style: TextStyle(fontSize: 18)),
-            Text(
-              'NulEat',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                    letterSpacing: 0.5,
-                  ),
+            Flexible(
+              child: Text(
+                'NulEat',
+                overflow: TextOverflow.ellipsis,
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 0.5,
+                    ),
+              ),
             ),
           ],
         ),
@@ -203,6 +207,8 @@ class HomeView extends GetView<HomeController> {
                 children: [
                   Text(
                     'Good ${_greeting()}, Foodie! 👋',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                     style: const TextStyle(
                       color: Colors.white70,
                       fontSize: 13,
@@ -212,6 +218,8 @@ class HomeView extends GetView<HomeController> {
                   const SizedBox(height: 4),
                   const Text(
                     'What would you like to eat?',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,

@@ -104,23 +104,32 @@ class _RecommendCard extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(AppDimensions.sm),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(food.name,
-                      maxLines: 1,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(AppDimensions.sm),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      food.name,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                          fontWeight: FontWeight.w600, fontSize: 12)),
-                  const SizedBox(height: 2),
-                  Text('\$${food.price.toStringAsFixed(2)}',
+                          fontWeight: FontWeight.w600, fontSize: 12),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '\$${food.price.toStringAsFixed(2)}',
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
                       style: const TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.w800,
-                          fontSize: 13)),
-                ],
+                          fontSize: 13),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],

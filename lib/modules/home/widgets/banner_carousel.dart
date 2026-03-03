@@ -101,6 +101,7 @@ class _BannerCard extends StatelessWidget {
         ],
       ),
       child: Stack(
+        clipBehavior: Clip.hardEdge,
         children: [
           Positioned(
             right: -10,
