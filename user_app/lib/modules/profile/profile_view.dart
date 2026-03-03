@@ -29,27 +29,30 @@ class ProfileView extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: AppDimensions.md),
                 child: Column(
                   children: [
-                    _section('Account', [
+                    _section('Account', isDark, [
                       _tile(
                         icon: Icons.location_on_outlined,
                         label: 'Saved Addresses',
+                        isDark: isDark,
                         onTap: () => Get.toNamed(AppRoutes.addresses),
                       ),
                       _tile(
                         icon: Icons.receipt_long_outlined,
                         label: 'Order History',
+                        isDark: isDark,
                         onTap: () => Get.toNamed(AppRoutes.orderHistory),
                       ),
                     ]),
 
                     const SizedBox(height: AppDimensions.md),
 
-                    _section('Preferences', [
+                    _section('Preferences', isDark, [
                       _tile(
                         icon: isDark
                             ? Icons.dark_mode_rounded
                             : Icons.light_mode_rounded,
                         label: 'Dark Mode',
+                        isDark: isDark,
                         trailing: Switch(
                           value: isDark,
                           activeThumbColor: AppColors.primary,
@@ -63,26 +66,30 @@ class ProfileView extends StatelessWidget {
                       _tile(
                         icon: Icons.notifications_outlined,
                         label: 'Notifications',
+                        isDark: isDark,
                         onTap: () {},
                       ),
                     ]),
 
                     const SizedBox(height: AppDimensions.md),
 
-                    _section('Support', [
+                    _section('Support', isDark, [
                       _tile(
                         icon: Icons.help_outline_rounded,
                         label: 'Help & FAQ',
+                        isDark: isDark,
                         onTap: () {},
                       ),
                       _tile(
                         icon: Icons.privacy_tip_outlined,
                         label: 'Privacy Policy',
+                        isDark: isDark,
                         onTap: () {},
                       ),
                       _tile(
                         icon: Icons.info_outline_rounded,
                         label: 'About NulEat',
+                        isDark: isDark,
                         onTap: () {},
                       ),
                     ]),
@@ -166,7 +173,7 @@ class ProfileView extends StatelessWidget {
     );
   }
 
-  Widget _section(String title, List<Widget> tiles) {
+  Widget _section(String title, bool isDark, List<Widget> tiles) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -174,19 +181,23 @@ class ProfileView extends StatelessWidget {
           padding: const EdgeInsets.only(
               left: AppDimensions.xs, bottom: AppDimensions.sm),
           child: Text(title.toUpperCase(),
-              style: const TextStyle(
-                  color: AppColors.textLight,
+              style: TextStyle(
+                  color: isDark
+                      ? Colors.white.withValues(alpha: 0.5)
+                      : AppColors.textLight,
                   fontSize: AppDimensions.textXs,
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1.2)),
         ),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: isDark ? AppColors.darkSurface : Colors.white,
             borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
             boxShadow: [
               BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: isDark
+                      ? Colors.black.withValues(alpha: 0.2)
+                      : Colors.black.withValues(alpha: 0.05),
                   blurRadius: 8,
                   offset: const Offset(0, 2))
             ],
@@ -200,6 +211,7 @@ class ProfileView extends StatelessWidget {
   Widget _tile({
     required IconData icon,
     required String label,
+    required bool isDark,
     VoidCallback? onTap,
     Widget? trailing,
   }) {
@@ -208,16 +220,21 @@ class ProfileView extends StatelessWidget {
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.1),
+          color: AppColors.primary.withValues(alpha: isDark ? 0.15 : 0.1),
           borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
         ),
         child: Icon(icon, color: AppColors.primary, size: AppDimensions.iconSm),
       ),
       title: Text(label,
-          style: const TextStyle(
-              fontWeight: FontWeight.w500, fontSize: AppDimensions.textMd)),
+          style: TextStyle(
+              color: isDark ? Colors.white : AppColors.textDark,
+              fontWeight: FontWeight.w500,
+              fontSize: AppDimensions.textMd)),
       trailing: trailing ??
-          const Icon(Icons.chevron_right_rounded, color: AppColors.textLight),
+          Icon(Icons.chevron_right_rounded,
+              color: isDark
+                  ? Colors.white.withValues(alpha: 0.3)
+                  : AppColors.textLight),
       onTap: onTap,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusLg)),
