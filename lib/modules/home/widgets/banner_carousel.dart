@@ -42,7 +42,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
         CarouselSlider.builder(
           itemCount: _banners.length,
           options: CarouselOptions(
-            height: 130,
+            height: 152,
             autoPlay: true,
             autoPlayInterval: const Duration(seconds: 4),
             autoPlayCurve: Curves.easeInOut,
@@ -116,14 +116,16 @@ class _BannerCard extends StatelessWidget {
                 .scale(
                   begin: const Offset(1, 1),
                   end: const Offset(1.08, 1.08),
-                  duration: 2.seconds,
+                  duration: const Duration(seconds: 2),
                 ),
           ),
           Padding(
-            padding: const EdgeInsets.all(AppDimensions.md + 4),
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppDimensions.md, vertical: AppDimensions.sm + 4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   banner.title,

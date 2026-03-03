@@ -92,7 +92,7 @@ class MockFoodDatasource {
         rating: 4.8,
         reviewCount: 156,
         imageUrl:
-            'https://images.unsplash.com/photo-1617196034183-421b4040ed20?w=600&q=80',
+            'https://images.unsplash.com/photo-1562802378-063ec186a863?w=600&q=80',
         description:
             'Shrimp tempura and cucumber inside, topped with thinly sliced avocado, tobiko, and eel sauce. A restaurant signature.',
         isPopular: true,

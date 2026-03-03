@@ -40,11 +40,11 @@ class AuthController extends GetxController {
     await Future.delayed(const Duration(milliseconds: 1500));
     isLoading.value = false;
 
-    // Navigate to home
-    Get.offAllNamed(AppRoutes.home);
+    // Navigate to main app shell
+    Get.offAllNamed(AppRoutes.shell);
   }
 
   Future<void> continueAsGuest() async {
-    Get.offAllNamed(AppRoutes.home);
+    Get.offAllNamed(AppRoutes.shell);
   }
 }

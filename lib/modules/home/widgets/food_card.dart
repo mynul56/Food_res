@@ -73,6 +73,7 @@ class FoodCard extends StatelessWidget {
                 padding: const EdgeInsets.all(AppDimensions.sm),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Category tag
                     ConstrainedBox(
@@ -108,7 +109,7 @@ class FoodCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const Spacer(),
+                    const SizedBox(height: 4),
                     // Rating + Price + Add button
                     Row(
                       mainAxisSize: MainAxisSize.max,

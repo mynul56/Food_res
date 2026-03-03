@@ -5,12 +5,23 @@ import '../../domain/entities/cart_item_entity.dart';
 class CartController extends GetxController {
   final cartItems = <CartItemEntity>[].obs;
   final isLoading = false.obs;
+  final promoCode = ''.obs;
+  final promoDiscount = 0.0.obs;
+  final _itemNotes = <String, String>{}.obs;
+
+  // ── Valid promo codes ────────────────────────────────────────
+  static const _promoCodes = {
+    'SAVE10': 0.10,
+    'NULEAT20': 0.20,
+    'FIRSTORDER': 0.15,
+  };
 
   // ── Derived values ──────────────────────────────────────────
   int get itemCount => cartItems.fold(0, (sum, item) => sum + item.quantity);
   double get subtotal => cartItems.fold(0.0, (sum, item) => sum + item.total);
   double get deliveryFee => subtotal > 0 ? 2.99 : 0.0;
-  double get total => subtotal + deliveryFee;
+  double get discount => subtotal * promoDiscount.value;
+  double get total => subtotal + deliveryFee - discount;
 
   bool isInCart(String foodId) => cartItems.any((i) => i.food.id == foodId);
   int quantityOf(String foodId) {
@@ -47,12 +58,33 @@ class CartController extends GetxController {
     cartItems.removeWhere((i) => i.food.id == foodId);
   }
 
-  void clearCart() => cartItems.clear();
-
-  void placeOrder() async {
-    isLoading.value = true;
-    await Future.delayed(const Duration(seconds: 2));
-    clearCart();
-    isLoading.value = false;
+  void clearCart() {
+    cartItems.clear();
+    promoCode.value = '';
+    promoDiscount.value = 0.0;
+    _itemNotes.clear();
   }
+
+  // ── Promo code ─────────────────────────────────────────────
+  bool applyPromo(String code) {
+    final upper = code.trim().toUpperCase();
+    final rate = _promoCodes[upper];
+    if (rate != null) {
+      promoCode.value = upper;
+      promoDiscount.value = rate;
+      return true;
+    }
+    promoCode.value = '';
+    promoDiscount.value = 0.0;
+    return false;
+  }
+
+  void removePromo() {
+    promoCode.value = '';
+    promoDiscount.value = 0.0;
+  }
+
+  // ── Per-item notes ─────────────────────────────────────────
+  String noteFor(String foodId) => _itemNotes[foodId] ?? '';
+  void setNote(String foodId, String note) => _itemNotes[foodId] = note;
 }

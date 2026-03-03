@@ -123,7 +123,6 @@ class HomeView extends GetView<HomeController> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(context, cart),
     );
   }
 
@@ -386,113 +385,6 @@ class HomeView extends GetView<HomeController> {
                     ?.copyWith(color: AppColors.textLight)),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildBottomNav(BuildContext context, CartController cart) {
-    return Container(
-      height: AppDimensions.bottomNavHeight,
-      decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.dark
-            ? AppColors.darkSurface
-            : Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: const Offset(0, -4),
-          ),
-        ],
-        borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(AppDimensions.radiusXl),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _navItem(Icons.home_rounded, 'Home', isActive: true, onTap: () {}),
-          _navCartItem(cart),
-          _navItem(Icons.person_outline_rounded, 'Profile',
-              onTap: () => Get.toNamed(AppRoutes.profile)),
-        ],
-      ),
-    );
-  }
-
-  Widget _navItem(IconData icon, String label,
-      {bool isActive = false, required VoidCallback onTap}) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: AppDimensions.animNormal,
-        padding: const EdgeInsets.symmetric(
-            horizontal: AppDimensions.md, vertical: AppDimensions.sm),
-        decoration: BoxDecoration(
-          color: isActive
-              ? AppColors.primary.withOpacity(0.12)
-              : Colors.transparent,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusFull),
-        ),
-        child: Row(
-          children: [
-            Icon(icon,
-                color: isActive ? AppColors.primary : AppColors.textLight,
-                size: AppDimensions.iconMd),
-            if (isActive) ...[
-              const SizedBox(width: AppDimensions.xs),
-              Text(label,
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: AppDimensions.textSm,
-                  )),
-            ]
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _navCartItem(CartController cart) {
-    return GestureDetector(
-      onTap: () => Get.toNamed(AppRoutes.cart),
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(AppDimensions.sm + 2),
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(Icons.shopping_cart_rounded,
-                color: Colors.white, size: AppDimensions.iconMd),
-          ),
-          Obx(() => cart.itemCount > 0
-              ? Positioned(
-                  right: -4,
-                  top: -4,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: AppColors.accent,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: Text(
-                        '${cart.itemCount}',
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800),
-                      ),
-                    ),
-                  ),
-                )
-              : const SizedBox()),
-        ],
       ),
     );
   }
